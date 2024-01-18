@@ -134,7 +134,17 @@ private fun PostHeaderImage(post: Post) {
 @Composable
 private fun PostMetadata(metadata: Metadata) {
     val typography = MaterialTheme.typography
-    Row {
+    Row(
+        /* BEGIN-8 - Custom merging */
+        // By default, each low level composable in Jetpack Compose that sets at
+        // least one semantics property receives focus.
+        // However, having too many focusable elements on screen can lead to
+        // confusion as the user navigates them one by one. Instead,
+        // composables can be merged together using the semantics modifier
+        // with its mergeDescendants property.
+        Modifier.semantics(mergeDescendants = true) {}
+        /* END-8 */
+    ) {
         Image(
             imageVector = Icons.Filled.AccountCircle,
             contentDescription = null,

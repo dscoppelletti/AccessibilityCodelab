@@ -48,6 +48,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -62,6 +65,9 @@ import com.example.jetnews.ui.theme.JetnewsTheme
 @Composable
 fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
     var openDialog by remember { mutableStateOf(false) }
+    /* BEGIN-5 - Custom actions */
+    val showFewerLabel = stringResource(R.string.cd_show_fewer)
+    /* END-5 */
     Row(
         Modifier.clickable(
             /* BEGIN-4 - Click labels */
@@ -75,6 +81,24 @@ fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
             onClickLabel = stringResource(R.string.action_read_article)
             /* END-4 */
         ) { navigateToArticle(post.id) }
+            /* BEGIN-5.2 - Custom actions */
+            // However, by removing the semantics of the IconButton, there is
+            // now no way to execute the action anymore. We can add the action
+            // to the list item instead by adding a custom action in the
+            // semantics modifier.
+            // Now we can use the custom action popup in TalkBack to apply the
+            // action. This becomes more and more relevant as the number of
+            // actions inside a list item increases.
+            .semantics {
+                customActions = listOf(
+                    CustomAccessibilityAction(
+                        label = showFewerLabel,
+                        // action returns boolean to indicate success
+                        action = { openDialog = true; true }
+                    )
+                )
+            }
+            /* END-5.2 */
     ) {
         Image(
             painter = painterResource(post.imageThumbId),
@@ -138,7 +162,20 @@ fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
 //                    /* END-3.1 */
 //                    .size(24.dp)
 //            )
-            IconButton(onClick = { openDialog = true }) {
+            IconButton(
+                /* BEGIN-5.1 - Custom actions */
+                // By default, both the Row and the IconButton composable are
+                // clickable and as a result will be focused by TalkBack. This
+                // happens for each item in our list, which means a lot of
+                // swiping while navigating the list. We rather want the action
+                // related to the IconButton to be included as a custom action
+                // on the list item. We can tell Accessibility Services not to
+                // interact with this Icon by using the clearAndSetSemantics
+                // modifier.
+                modifier = Modifier.clearAndSetSemantics { },
+                /* END-5.1 */
+                onClick = { openDialog = true }
+            ) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(R.string.cd_show_fewer)

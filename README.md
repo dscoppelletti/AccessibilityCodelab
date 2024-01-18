@@ -10,6 +10,8 @@ the [Accessibility in Jetpack Compose Codelab](https://developer.android.com/cod
 * [AccessibilityScanner](http://support.google.com/accessibility/android/answer/6376570)
 * [Instructions to turn TackBack on](http://support.google.com/accessibility/android/answer/6007100)
 * [Android Accessibility Suite](http://play.google.com/store/apps/details?id=com.google.android.marvin.talkback)
+* [Accessibility in Jetpack Compose](http://developer.android.com/jetpack/compose/accessibility)
+* [Semantics in Jetpack Compose(http://developer.android.com/jetpack/compose/semantics)]
 
 ## License
 

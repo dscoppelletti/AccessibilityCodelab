@@ -1,0 +1,8 @@
+# Files attributes
+*.jar binary
+*.keystore binary
+*.png binary
+*.webp binary
+.gitignore export-ignore
+.gitattributes export-ignore
+

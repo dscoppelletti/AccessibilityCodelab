@@ -48,6 +48,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,7 +63,18 @@ import com.example.jetnews.ui.theme.JetnewsTheme
 fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
     var openDialog by remember { mutableStateOf(false) }
     Row(
-        Modifier.clickable { navigateToArticle(post.id) }
+        Modifier.clickable(
+            /* BEGIN-4 - Click labels */
+            // Clickable elements in your app by default don't provide any
+            // information on what clicking that element will do.Therefore,
+            // accessibility services like TalkBack will use a very generic
+            // default description.
+            // To provide the best experience for users with accessibility
+            // needs, we can provide a specific description that explains what
+            // will happen when the user clicks this element.
+            onClickLabel = stringResource(R.string.action_read_article)
+            /* END-4 */
+        ) { navigateToArticle(post.id) }
     ) {
         Image(
             painter = painterResource(post.imageThumbId),
@@ -171,9 +184,18 @@ fun PostCardPopular(
     navigateToArticle: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    /* BEGIN-4 - Click labels */
+    val readArticleLabel = stringResource(id = R.string.action_read_article)
+    /* END-4 */
     Card(
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.size(280.dp, 240.dp),
+        modifier = modifier.size(280.dp, 240.dp)
+            /* BEGIN-4 - Click labels */
+            // This composable uses the Card composable internally, which does
+            // not allow you to directly set the click label. Instead, you can
+            // use the semantics modifier to set the click label:
+            .semantics { onClick(label = readArticleLabel, action = null) },
+            /* END-4 */
         onClick = { navigateToArticle(post.id) }
     ) {
         Column {

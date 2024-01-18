@@ -52,6 +52,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
@@ -181,7 +183,12 @@ private fun Paragraph(paragraph: Paragraph) {
             )
             ParagraphType.Header -> {
                 Text(
-                    modifier = Modifier.padding(4.dp),
+                    modifier = Modifier.padding(4.dp)
+                        /* BEGIN-7 - Headings */
+                        // We can set the heading semantics property to indicate
+                        // that this composable is a heading.
+                        .semantics { heading() },
+                        /* END-7 */
                     text = annotatedString,
                     style = textStyle.merge(paragraphStyle)
                 )

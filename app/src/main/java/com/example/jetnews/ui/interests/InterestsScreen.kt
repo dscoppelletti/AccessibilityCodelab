@@ -45,6 +45,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -157,8 +159,24 @@ fun InterestsScreen(
 @Composable
 private fun TopicItem(itemTitle: String, selected: Boolean, onToggle: () -> Unit) {
     val image = painterResource(R.drawable.placeholder_1_1)
+    /* BEGIN-10 - State descriptions */
+    val stateNotSubscribed = stringResource(R.string.state_not_subscribed)
+    val stateSubscribed = stringResource(R.string.state_subscribed)
+    /* END-10 */
     Row(
         modifier = Modifier
+            /* BEGIN-10 - State descriptions */
+            // By default, our Checkbox status is read as either "Ticked" or
+            // "Not ticked". We can replace this description with our own
+            // custom description.
+            .semantics {
+                stateDescription = if (selected) {
+                    stateSubscribed
+                } else {
+                    stateNotSubscribed
+                }
+            }
+            /* END-10 */
             /* BEGIN-9 - Switches and checkboxes */
             // Toggleable elements like Switch and Checkbox read out loud their
             // checked state as they are selected by TalkBack. Without context

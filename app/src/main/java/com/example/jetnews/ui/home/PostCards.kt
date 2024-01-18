@@ -30,6 +30,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -91,13 +92,46 @@ fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
             }
         }
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = stringResource(R.string.cd_show_fewer),
-                modifier = Modifier
-                    .clickable { openDialog = true }
-                    .size(24.dp)
-            )
+            /* BEGIN-3.2 - Touch target size */
+            // In our use case, there is an easier way to make sure the touch
+            // target is at least 48dp. We can make use of the Material
+            // component IconButton that will handle this for us.
+//            Icon(
+//                imageVector = Icons.Default.Close,
+//                contentDescription = stringResource(R.string.cd_show_fewer),
+//                modifier = Modifier
+//                    .clickable { openDialog = true }
+//                    /* BEGIN-3.1 - Touch target size */
+//                    // Any on-screen element that someone can click, touch, or
+//                    // otherwise interact with should be large enough for
+//                    // reliable interaction. You should make sure these elements
+//                    // have a width and height of at least 48dp.
+//                    // If these controls are sized dynamically, or resize based
+//                    // on the size of their content, consider using the sizeIn
+//                    // modifier to set a lower bound on their dimensions.
+//                    // Some Material components set these sizes for you. For
+//                    // example, the Button composable has its MinHeight set to
+//                    // 36dp, and uses 8dp vertical padding. This adds up to the
+//                    // required 48dp height.
+//                    //
+//                    // The order of modifier functions is significant. Since
+//                    // each function makes changes to the Modifier returned by
+//                    // the previous function, the sequence affects the final
+//                    // result. In this case, we apply the padding before setting
+//                    // the size, but after applying the clickable modifier. This
+//                    // way the padding will be added to the size, and the whole
+//                    // element will be clickable.
+//                    .padding(12.dp)
+//                    /* END-3.1 */
+//                    .size(24.dp)
+//            )
+            IconButton(onClick = { openDialog = true }) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.cd_show_fewer)
+                )
+            }
+            /* END-3.2 */
         }
     }
     if (openDialog) {
